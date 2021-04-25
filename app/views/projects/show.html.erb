@@ -1,0 +1,79 @@
+<%= link_to 'Back', projects_path, class: "btn btn-secondary mb-3" %>
+<div class="card">
+  <div class="card-body">
+    <h2 class='card-title d-flex justify-content-between mb-4'>
+      <span><%= @project.name %></span>
+      <div>
+        <%= link_to 'Edit', edit_project_path(@project), class: 'btn btn-ligth' %>
+        <%= link_to 'Destroy', @project, method: :delete, class: 'btn btn-dark', data: { confirm: 'Are you sure?' } %>
+      </div>
+    </h2>
+
+    <div class="mb-4">
+      <h6>Add task</h6>
+      
+      <%= form_for([@task.project, @task]) do |f| %>
+        <% if @task.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@task.errors.count, "error") %> prohibited this task from being saved:</h2>
+            <ul>
+              <% @task.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <%= f.hidden_field :status, value: 'backlog'%>
+        <div class="input-group">
+          <%= f.text_field :name, class: 'form-control', placeholder: 'Enter Task Name' %>
+          <div class="input-group-append">
+            <%= f.submit class: 'btn btn-primary'%>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <h4>Tasks</h4>
+    <ul id='tasks-list'>
+      <% @project.tasks.each do |task| %>
+        <% if task.persisted? %>
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div class='task-status'>
+                  <i class="fas fa-grip-vertical grip text-secondary mr-1"></i>
+                  <span class="badge badge-<%= task.color_class %> mb-3"><%= task.status %></span>
+                </div>
+                <div>
+                  <%= link_to edit_project_task_path(task.project, task), class: 'btn btn-light btn-sm' do %>
+                    <i class='far fa-edit'></i>
+                  <% end %>
+                  <%= link_to [task.project, task], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-dark btn-sm' do %>
+                    <i class='fas fa-trash'></i>
+                  <% end%>
+                </div>
+              </div>
+              <h5 class='card-title mb-2'>
+                <span><%= task.name %></span>
+              </h5>
+              <p class='text-secondary'><%= task.description%> </p>
+              <p class='text-secondary'>
+                <% if task.assigned_to.present? %>
+                  <span style="float:left;">Assigned to: <b><%= task.assigned_to.email%></b></br>
+                    Estimated completion time: <%= task.estimated_completion_time %>
+                  </span>
+
+                <% end %>
+                <span style="float:right;">
+                  <small>
+                    Created By <%= task.created_by.email%>  on <%= task.created_date %>
+                  </small>
+                </span>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      <%end %>
+    </ul>
+  </div>
+</div>
