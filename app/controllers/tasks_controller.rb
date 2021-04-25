@@ -34,7 +34,6 @@ class TasksController < ApplicationController
 
   # PUT projects/1/tasks/1
   def update
-    debugger
     params = task_params
     params[:assigned_to] = User.find task_params[:assigned_to]
     if @task.update_attributes(params)

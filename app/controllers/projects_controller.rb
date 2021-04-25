@@ -3,7 +3,6 @@ class ProjectsController < ApplicationController
 
   # GET /projects or /projects.json
   def index
-    debugger
     @projects = current_user.projects.includes(:created_by)
   end
 
