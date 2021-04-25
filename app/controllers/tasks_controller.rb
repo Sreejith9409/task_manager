@@ -1,3 +1,5 @@
+require "google/apis/calendar_v3"
+require "google/api_client/client_secrets.rb"
 class TasksController < ApplicationController
   before_action :set_project
   before_action :set_task, only: [:show, :edit, :update, :destroy]
